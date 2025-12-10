@@ -5,12 +5,28 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  useIonViewDidEnter,
 } from "@ionic/react";
+import React, { useState } from "react";
 
 import "./Tab1.css";
 import RepoItem from "../components/RepoItem";
+import { RepositoryItem } from "../interfaces/RepositoryItem";
+import { fetchRepositories } from "../services/GithubService";
 
 const Tab1: React.FC = () => {
+  const [repos, setRepos] = useState<RepositoryItem[]>([]);
+
+  const loadRepos = async () => {
+    const reposData = await fetchRepositories();
+    setRepos(reposData);
+  };
+
+  useIonViewDidEnter(() => {
+    console.log("IonViewDidEnter - Cargando repositorios");
+    loadRepos();
+  });
+
   return (
     <IonPage>
       <IonHeader>
@@ -25,20 +41,9 @@ const Tab1: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonList>
-          <RepoItem
-            name="android-project"
-            imageUrl="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/1022px-Android_robot.svg.png"
-          />
-
-          <RepoItem
-            name="iOS-project"
-            imageUrl="https://e7.pngegg.com/pngimages/980/413/png-clipart-apple-logo-business-iphone-apple-heart-computer.png"
-          />
-
-          <RepoItem
-            name="Ionic-project"
-            imageUrl="https://e7.pngegg.com/pngimages/426/603/png-clipart-ionic-new-logo-tech-companies.png"
-          />
+          {repos.map((repo, index) => (
+            <RepoItem key={index} repo={repo} />
+          ))}
         </IonList>
       </IonContent>
     </IonPage>
