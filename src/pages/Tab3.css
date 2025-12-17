@@ -1,0 +1,20 @@
+/* Eliminar márgenes y padding del card */
+ion-card {
+  --background: transparent;
+  margin: 12px 16px;
+  padding: 0;
+}
+
+/* Imagen sin espacios */
+ion-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Mantener padding en header y content */
+ion-card-header,
+ion-card-content {
+  padding: 16px;
+}
