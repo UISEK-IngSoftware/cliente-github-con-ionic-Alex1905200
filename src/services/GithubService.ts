@@ -76,3 +76,37 @@ export const getUserInfo = async (): Promise<UserInfo> => {
     return userInfo;
   }
 };
+
+export const updateRepository = async (
+  owner: string,
+  repoName: string,
+  description: string
+): Promise<void> => {
+  try {
+    const payload = {
+      description: description,
+    };
+
+    const response = await githubApi.patch(
+      `/repos/${owner}/${repoName}`,
+      payload
+    );
+    console.log("Repositorio actualizado con éxito:", response.data);
+  } catch (error) {
+    console.error("Hubo un error al actualizar el repositorio:", error);
+    throw error;
+  }
+};
+
+export const deleteRepository = async (
+  owner: string,
+  repoName: string
+): Promise<void> => {
+  try {
+    await githubApi.delete(`/repos/${owner}/${repoName}`);
+    console.log("Repositorio eliminado con éxito");
+  } catch (error) {
+    console.error("Hubo un error al eliminar el repositorio:", error);
+    throw error;
+  }
+};
