@@ -65,8 +65,21 @@ const Tab1: React.FC = () => {
   const confirmDelete = async () => {
     if (selectedRepo?.owner) {
       setLoading(true);
-      await deleteRepository(selectedRepo.owner, selectedRepo.name);
-      await loadRepos();
+      try {
+        await deleteRepository(selectedRepo.owner, selectedRepo.name);
+        // Eliminar el repositorio localmente sin recargar toda la lista
+        setRepos((prevRepos) =>
+          prevRepos.filter(
+            (repo) =>
+              !(
+                repo.name === selectedRepo.name &&
+                repo.owner === selectedRepo.owner
+              ),
+          ),
+        );
+      } catch (error) {
+        console.error("Error al eliminar:", error);
+      }
       setLoading(false);
     }
     setShowDeleteAlert(false);
@@ -75,12 +88,23 @@ const Tab1: React.FC = () => {
   const confirmEdit = async () => {
     if (selectedRepo?.owner) {
       setLoading(true);
-      await updateRepository(
-        selectedRepo.owner,
-        selectedRepo.name,
-        editDescription
-      );
-      await loadRepos();
+      try {
+        await updateRepository(
+          selectedRepo.owner,
+          selectedRepo.name,
+          editDescription,
+        );
+        // Actualizar el repositorio localmente sin recargar toda la lista
+        setRepos((prevRepos) =>
+          prevRepos.map((repo) =>
+            repo.name === selectedRepo.name && repo.owner === selectedRepo.owner
+              ? { ...repo, description: editDescription }
+              : repo,
+          ),
+        );
+      } catch (error) {
+        console.error("Error al actualizar:", error);
+      }
       setLoading(false);
     }
     setShowEditModal(false);

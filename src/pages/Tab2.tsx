@@ -38,7 +38,12 @@ const Tab2: React.FC = () => {
     }
     createRepository(repoFormData)
       .then(() => {
-        history.push("/tab1");
+        // Desenfocar el botón activo para evitar el error de aria-hidden
+        (document.activeElement as HTMLElement)?.blur();
+        // Pequeño delay para asegurar que GitHub haya procesado la creación
+        setTimeout(() => {
+          history.push("/tab1");
+        }, 500);
       })
       .catch(() => {
         alert("Error al crear el repositorio:");
