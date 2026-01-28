@@ -13,13 +13,13 @@ import {
   IonTextarea,
   IonItem,
   IonLabel,
-  IonLoading,
   // ⬆️ NUEVOS IMPORTS
 } from "@ionic/react";
 import React, { useState } from "react";
 
 import "./Tab1.css";
 import RepoItem from "../components/RepoItem";
+import LoadingSpinner from "../components/LoadingSpinner";
 import { RepositoryItem } from "../interfaces/RepositoryItem";
 import {
   fetchRepositories,
@@ -126,7 +126,7 @@ const Tab1: React.FC = () => {
         </IonHeader>
 
         {/* ⬇️ NUEVO */}
-        <IonLoading isOpen={loading} message="Procesando..." />
+        <LoadingSpinner isOpen={loading} />
         {/* ⬆️ NUEVO */}
 
         <IonList>

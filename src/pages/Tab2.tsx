@@ -11,10 +11,12 @@ import "./Tab2.css";
 import { useHistory } from "react-router-dom";
 import { RepositoryItem } from "../interfaces/RepositoryItem";
 import { createRepository } from "../services/GithubService";
+import { useState } from "react";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Tab2: React.FC = () => {
   const history = useHistory();
-
+  const [loading, setLoading] = useState(false);
   const repoFormData: RepositoryItem = {
     name: "",
     description: "",
@@ -36,6 +38,7 @@ const Tab2: React.FC = () => {
       alert("El nombre del repositorio es obligatorio.");
       return;
     }
+    setLoading(true);
     createRepository(repoFormData)
       .then(() => {
         // Desenfocar el botón activo para evitar el error de aria-hidden
@@ -47,6 +50,9 @@ const Tab2: React.FC = () => {
       })
       .catch(() => {
         alert("Error al crear el repositorio:");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -93,6 +99,7 @@ const Tab2: React.FC = () => {
             Guardar
           </IonButton>
         </div>
+        <LoadingSpinner isOpen={loading} />
       </IonContent>
     </IonPage>
   );

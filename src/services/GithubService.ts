@@ -19,7 +19,7 @@ githubApi.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
@@ -30,6 +30,7 @@ export const fetchRepositories = async (): Promise<RepositoryItem[]> => {
         sort: "created",
         direction: "desc",
         affiliation: "owner",
+        t: Date.now(), // Evitar caché
       },
     });
 
@@ -64,7 +65,7 @@ export const getUserInfo = async (): Promise<UserInfo> => {
   } catch (error) {
     console.error(
       "Hubo un error al obtener la información del usuario:",
-      error
+      error,
     );
     const userInfo: UserInfo = {
       login: "undefined",
@@ -80,7 +81,7 @@ export const getUserInfo = async (): Promise<UserInfo> => {
 export const updateRepository = async (
   owner: string,
   repoName: string,
-  description: string
+  description: string,
 ): Promise<void> => {
   try {
     const payload = {
@@ -89,7 +90,7 @@ export const updateRepository = async (
 
     const response = await githubApi.patch(
       `/repos/${owner}/${repoName}`,
-      payload
+      payload,
     );
     console.log("Repositorio actualizado con éxito:", response.data);
   } catch (error) {
@@ -100,7 +101,7 @@ export const updateRepository = async (
 
 export const deleteRepository = async (
   owner: string,
-  repoName: string
+  repoName: string,
 ): Promise<void> => {
   try {
     await githubApi.delete(`/repos/${owner}/${repoName}`);
